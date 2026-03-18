@@ -1,0 +1,131 @@
+# =============================================================================
+# api_config.txt — Price Technicals Routine
+# =============================================================================
+# All configuration parameters for data fetching, technical calculations,
+# and return period calculations.
+#
+# FORMAT:  KEY = VALUE
+# Lines beginning with # are comments. Blank lines are ignored.
+# Keys are case-insensitive. Do not use quotes around values.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# [1] API SETTINGS
+# -----------------------------------------------------------------------------
+# DATA_FREQUENCY   : eod | 1hour | 5min | 15min | 30min | 4hour
+#                    Use "eod" for daily moving averages and return calcs.
+#                    Intraday frequencies are for short-term price charts only.
+#
+# DATE_MODE        : range | days_back
+#                    "range"     → use START_DATE and END_DATE explicitly
+#                    "days_back" → use DAYS_BACK to compute start from today
+#
+# START_DATE       : YYYY-MM-DD  (used only when DATE_MODE = range)
+# END_DATE         : YYYY-MM-DD  (used only when DATE_MODE = range)
+#                    Set END_DATE = today to always pull through current date.
+#
+# DAYS_BACK        : integer number of calendar days before today
+#                    (used only when DATE_MODE = days_back)
+#                    Recommended minimum: 365 to support 200MA and 1yr return.
+#                    Use 760 (≈2 years) for full 200MA warmup + history.
+#
+# PRICE_TYPE       : adjusted | unadjusted
+#                    "adjusted"   → uses adjClose if available in API response
+#                    "unadjusted" → uses raw close price
+#                    NOTE: The FMP Stable API (post-Aug 2025) only returns
+#                    raw close. Both settings will use 'close' unless adjClose
+#                    is present in the response.
+# -----------------------------------------------------------------------------
+
+DATA_FREQUENCY   = eod
+DATE_MODE        = days_back
+DAYS_BACK        = 760
+START_DATE       = 2023-01-01
+END_DATE         = today
+PRICE_TYPE       = adjusted
+
+
+# -----------------------------------------------------------------------------
+# [2] MOVING AVERAGE SETTINGS
+# -----------------------------------------------------------------------------
+# MA_WINDOWS       : comma-separated list of integer day windows to compute.
+#                    Standard values: 20, 50, 100, 200
+#                    The script will compute a rolling mean for each window.
+#
+# MA_CROSS_LOOKBACK: integer — number of trading days to look back when
+#                    checking for a Golden Cross (50MA crosses above 200MA)
+#                    or Death Cross (50MA crosses below 200MA).
+#                    Set to 0 to disable cross detection.
+# -----------------------------------------------------------------------------
+
+MA_WINDOWS        = 50, 200
+MA_CROSS_LOOKBACK = 30
+
+
+# -----------------------------------------------------------------------------
+# [3] RETURN PERIOD SETTINGS
+# -----------------------------------------------------------------------------
+# RETURN_PERIODS   : comma-separated list of return periods to calculate.
+#
+# Supported keywords:
+#   WTD   → Week-to-date  (Monday open of current week → today)
+#   MTD   → Month-to-date (first trading day of month → today)
+#   QTD   → Quarter-to-date
+#   YTD   → Year-to-date  (first trading day of year → today)
+#   1M    → Last 1 calendar month
+#   3M    → Last 3 calendar months
+#   6M    → Last 6 calendar months
+#   1Y    → Last 1 year (365 calendar days)
+#   3Y    → Last 3 years
+#   5Y    → Last 5 years
+#
+# Returns are computed as:  (price_today / price_start) - 1
+# expressed as a percentage.
+# -----------------------------------------------------------------------------
+
+RETURN_PERIODS    = WTD, MTD, QTD, YTD, 1M, 3M, 6M, 1Y
+
+
+# -----------------------------------------------------------------------------
+# [4] REPORT SETTINGS
+# -----------------------------------------------------------------------------
+# REPORT_MODE      : combined | per_ticker | both
+#                    "combined"   → one PDF for all tickers (summary + detail pages)
+#                    "per_ticker" → one PDF per ticker
+#                    "both"       → produces both outputs
+#
+# CHART_STYLE      : line | candlestick
+#                    "line"        → clean line chart (recommended for MA overlay)
+#                    "candlestick" → OHLC candlestick chart
+#
+# CHART_LOOKBACK_DAYS : integer — number of trading days of price history
+#                       to display in the price chart. Does not affect
+#                       return or MA calculations (those always use full history).
+#
+# INCLUDE_SUMMARY_PAGE : true | false
+#                    Whether to prepend a summary table page to the combined
+#                    report showing all tickers side-by-side.
+#
+# FLAG_CROSS_EVENTS : true | false
+#                    Whether to annotate Golden Cross / Death Cross events
+#                    on the price chart and highlight them in the report.
+# -----------------------------------------------------------------------------
+
+REPORT_MODE           = both
+CHART_STYLE           = line
+CHART_LOOKBACK_DAYS   = 365
+INCLUDE_SUMMARY_PAGE  = true
+FLAG_CROSS_EVENTS     = true
+
+
+# -----------------------------------------------------------------------------
+# [5] OUTPUT / CACHE PATHS  (relative to this config file's directory)
+# -----------------------------------------------------------------------------
+# These paths are relative. The script resolves them from the workspace root.
+# Change only if you rename your folders.
+# -----------------------------------------------------------------------------
+
+CACHE_DIR    = cache_
+OUTPUT_DIR   = output_
+LOG_DIR      = logs

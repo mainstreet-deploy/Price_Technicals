@@ -1,0 +1,17 @@
+# API keys — never commit
+fmp.env
+fmp_api_key.txt
+
+# Generated cache and output — large, ephemeral
+cache_/
+output_/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
