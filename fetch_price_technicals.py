@@ -16,6 +16,9 @@ import json
 import logging
 import os
 import sys
+
+sys.stdout.reconfigure(encoding="utf-8")
+
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path

@@ -21,6 +21,9 @@ Dependencies: pandas, numpy, matplotlib
 import json
 import logging
 import sys
+
+sys.stdout.reconfigure(encoding="utf-8")
+
 import warnings
 from datetime import datetime
 from pathlib import Path

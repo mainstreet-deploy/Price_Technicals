@@ -9,28 +9,26 @@ echo ====================================
 echo  Step 1: Fetch Price Data
 echo ====================================
 echo.
-python fetch_price_technicals.py > logs\fetch_log.txt 2>&1
+python fetch_price_technicals.py
 if errorlevel 1 (
     echo.
     echo [ERROR] Fetch step failed. See logs\fetch_log.txt for details.
     echo ====================================
     exit /b 1
 )
-echo Fetch complete.
 
 echo.
 echo ====================================
 echo  Step 2: Generate Technicals Report
 echo ====================================
 echo.
-python generate_technicals_report.py > logs\report_log.txt 2>&1
+python generate_technicals_report.py
 if errorlevel 1 (
     echo.
     echo [ERROR] Report step failed. See logs\report_log.txt for details.
     echo ====================================
     exit /b 1
 )
-echo Report complete.
 
 echo.
 echo ====================================
